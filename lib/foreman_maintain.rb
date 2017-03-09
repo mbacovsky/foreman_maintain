@@ -15,6 +15,9 @@ module ForemanMaintain
   require 'foreman_maintain/concerns/system_helpers'
   require 'foreman_maintain/concerns/hammer'
   require 'foreman_maintain/top_level_modules'
+  require 'foreman_maintain/storage/yaml_storage'
+  require 'foreman_maintain/storage/inner_data/sync_plan'
+  require 'foreman_maintain/storage/upgrade'
   require 'foreman_maintain/config'
   require 'foreman_maintain/detector'
   require 'foreman_maintain/feature'
@@ -106,6 +109,12 @@ module ForemanMaintain
       custom_configs
     rescue => e
       raise "Couldn't load configuration file. Error: #{e.message}"
+    end
+
+    def storage(label)
+      ForemanMaintain::Storage.const_get(label.capitalize).instance
+    rescue => e
+      logger.error "Invalid Storage label i.e #{label}. Error - #{e.message}"
     end
   end
 end
