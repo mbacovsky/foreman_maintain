@@ -21,7 +21,7 @@ class Features::SyncPlans < ForemanMaintain::Feature
   end
 
   def disabled_plans_count
-    ForemanMaintain.storage(:upgrade).retrive_sync_plan_ids.length
+    data[:disabled].length
   end
 
   def make_disable(ids)
@@ -29,8 +29,7 @@ class Features::SyncPlans < ForemanMaintain::Feature
   end
 
   def make_enable
-    ids = ForemanMaintain.storage(:upgrade).retrive_sync_plan_ids
-    update_records(ids, true)
+    update_records(data[:enabled], true)
   end
 
   private
@@ -45,7 +44,18 @@ class Features::SyncPlans < ForemanMaintain::Feature
         raise result
       end
     end
+    data[enabled ? :enabled : :disabled] = updated_record_ids
   ensure
-    ForemanMaintain.storage(:upgrade).store_sync_plans(updated_record_ids, enabled)
+    save_state
+  end
+
+  def data
+    @data ||= ForemanMaintain.storage(:upgrade).fetch(:sync_plans, {:enabled => [], :disabled => []})
+  end
+
+  def save_state
+    storage = ForemanMaintain.storage(:upgrade)
+    storage[:sync_plans] = data
+    storage.save
   end
 end
