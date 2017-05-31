@@ -9,6 +9,7 @@ module ForemanMaintain
     class MainCommand < Base
       subcommand 'health', 'Health related commands', HealthCommand
       subcommand 'upgrade', 'Upgrade related commands', UpgradeCommand
+      subcommand 'database', 'Database related commands', UpgradeCommand
     end
   end
 end

@@ -1,11 +1,11 @@
-class Features::ForemanDatabase < ForemanMaintain::Feature
-  FOREMAN_DB_CONFIG = '/etc/foreman/database.yml'
+class Features::CandlepinDatabase < ForemanMaintain::Feature
+  CANDLEPIN_DB_CONFIG = '/etc/candlepin/candlepin.conf'
 
   metadata do
-    label :foreman_database
+    label :candlepin_database
 
     confine do
-      File.exist?(FOREMAN_DB_CONFIG)
+      File.exist?(CANDLEPIN_DB_CONFIG)
     end
   end
 
@@ -32,7 +32,15 @@ class Features::ForemanDatabase < ForemanMaintain::Feature
   private
 
   def load_configuration
-    config = YAML.load(File.read(FOREMAN_DB_CONFIG))
-    @configuration = config['production']
+    raw_config = File.read(CANDLEPIN_DB_CONFIG)
+    full_config = Hash[raw_config.scan(/(^[^#\n][^=]*)=(.*)/)]
+    uri = /:\/\/(([^\/:]*):?([^\/]*))\/(.*)/.match(full_config['org.quartz.dataSource.myDS.URL'])
+    @configuration = {
+        'username' => full_config['org.quartz.dataSource.myDS.user'],
+        'password' => full_config['org.quartz.dataSource.myDS.password'],
+        'database' => uri[4],
+        'host' => uri[2],
+        'port' => uri[3] || '5432'
+    }
   end
 end
