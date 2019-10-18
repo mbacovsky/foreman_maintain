@@ -1,6 +1,10 @@
 module Checks
   module Disk
     class Performance < ForemanMaintain::Check
+      DEFAULT_DIRS = [
+        '/var/lib/pulp', '/var/lib/mongodb', '/var/lib/pgsql'
+      ].select { |file_path| File.directory?(file_path) }.freeze
+
       metadata do
         label :disk_performance
         tags :pre_upgrade
