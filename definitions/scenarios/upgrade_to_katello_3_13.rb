@@ -1,24 +1,24 @@
-module Scenarios::Katello_3_14
+module Scenarios::Katello_3_13
   class Abstract < ForemanMaintain::Scenario
     def self.upgrade_metadata(&block)
       metadata do
         tags :upgrade_scenario
         confine do
           feature(:instance).upstream? && feature(:foreman_server) && \
-              feature(:katello).current_version.major_minor == '3.13'
+              feature(:katello).current_version.major_minor == '3.12'
         end
         instance_eval(&block)
       end
     end
 
     def target_version
-      '3.14'
+      '3.13'
     end
   end
 
   class PreUpgradeCheck < Abstract
     upgrade_metadata do
-      description 'Checks before upgrading to Katello 3.14'
+      description 'Checks before upgrading to Katello 3.13'
       tags :pre_upgrade_checks
       run_strategy :fail_slow
     end
@@ -26,13 +26,13 @@ module Scenarios::Katello_3_14
     def compose
       add_steps(find_checks(:default))
       add_steps(find_checks(:pre_upgrade))
-      add_step(Checks::Repositories::Validate.new(:version => '3.14'))
+      add_step(Checks::Repositories::Validate.new(:version => '3.13'))
     end
   end
 
   class PreMigrations < Abstract
     upgrade_metadata do
-      description 'Procedures before migrating to Katello 3.14'
+      description 'Procedures before migrating to Katello 3.13'
       tags :pre_migrations
     end
 
@@ -44,12 +44,12 @@ module Scenarios::Katello_3_14
 
   class Migrations < Abstract
     upgrade_metadata do
-      description 'Migration scripts to Katello 3.14'
+      description 'Migration scripts to Katello 3.13'
       tags :migrations
     end
 
     def compose
-      add_step(Procedures::Repositories::Setup.new(:version => '3.14'))
+      add_step(Procedures::Repositories::Setup.new(:version => '3.13'))
       add_step(Procedures::Packages::UnlockVersions.new)
       add_step(Procedures::Packages::Update.new(:assumeyes => true))
       add_step(Procedures::Installer::Upgrade.new)
@@ -58,7 +58,7 @@ module Scenarios::Katello_3_14
 
   class PostMigrations < Abstract
     upgrade_metadata do
-      description 'Procedures after migrating to Katello 3.14'
+      description 'Procedures after migrating to Katello 3.13'
       tags :post_migrations
     end
 
@@ -71,7 +71,7 @@ module Scenarios::Katello_3_14
 
   class PostUpgradeChecks < Abstract
     upgrade_metadata do
-      description 'Checks after upgrading to Katello 3.14'
+      description 'Checks after upgrading to Katello 3.13'
       tags :post_upgrade_checks
       run_strategy :fail_slow
     end
