@@ -67,8 +67,8 @@ module ForemanMaintain::PackageManager
     end
 
     def upgrade_foreman_repos(to_version)
-      update(foreman_release(to_version))
-      update("foreman-release-scl centos-release-scl-rh")
+      update(foreman_release(to_version), :assumeyes => true)
+      update(['foreman-release-scl', 'centos-release-scl-rh'], :assumeyes => true)
     end
 
     def foreman_repos_valid?(version)

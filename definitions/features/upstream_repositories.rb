@@ -16,7 +16,7 @@ class Features::UpstreamRepositories < ForemanMaintain::Feature
 
   def setup_repositories(version)
     if feature(:katello)
-      feature(:package_manager).update(katello_repos(version))
+      feature(:package_manager).update(katello_repos(version), :assumeyes => true)
       version = VERSION_MAPPING[version]
     end
     feature(:package_manager).upgrade_foreman_repos(version)
