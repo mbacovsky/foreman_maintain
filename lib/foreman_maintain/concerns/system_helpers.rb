@@ -23,6 +23,10 @@ module ForemanMaintain
           segments[1]
         end
 
+        def major_minor
+          "#{major}.#{minor}"
+        end
+
         def build
           segments[2]
         end

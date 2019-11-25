@@ -41,6 +41,10 @@ module ForemanMaintain
           '/var/lib/foreman/public'
         ]
       end
+
+      def current_version
+        @current_version ||= rpm_version('foreman')
+      end
     end
   end
 end

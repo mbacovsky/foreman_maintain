@@ -66,6 +66,19 @@ module ForemanMaintain::PackageManager
       sys.execute(find_cmd).split("\n")
     end
 
+    def upgrade_foreman_repos(to_version)
+      update(foreman_release(to_version))
+      update("foreman-release-scl centos-release-scl-rh")
+    end
+
+    def foreman_repos_valid?(version)
+      link_valid?(foreman_release(version))
+    end
+
+    def foreman_release(version)
+      "https://yum.theforeman.org/releases/#{version}/el7/x86_64/foreman-release.rpm"
+    end
+
     private
 
     def protector_config
@@ -113,6 +126,14 @@ module ForemanMaintain::PackageManager
          !File.exist?(dest)
         FileUtils.cp(File.join(extras_src, src), dest)
       end
+    end
+
+    def link_valid?(link)
+      url = URI.parse(link)
+      req = Net::HTTP.new(url.host, url.port)
+      req.use_ssl = true
+      res = req.request_head(url.path)
+      res.code == '200'
     end
   end
 end

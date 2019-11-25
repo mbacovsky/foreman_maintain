@@ -48,6 +48,14 @@ class Features::Instance < ForemanMaintain::Feature
     @downstream ||= (feature(:satellite) || feature(:capsule))
   end
 
+  def downstream?
+    !!downstream
+  end
+
+  def upstream?
+    !downstream?
+  end
+
   def ping
     if feature(:katello)
       katello_ping

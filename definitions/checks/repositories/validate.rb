@@ -18,11 +18,17 @@ module Checks::Repositories
     end
 
     def run
-      if feature(:instance).downstream.subscribed_using_activation_key?
-        skip 'Your system is subscribed using custom activation key'
+      if feature(:downstream)
+        if feature(:instance).downstream.subscribed_using_activation_key?
+          skip 'Your system is subscribed using custom activation key'
+        else
+          with_spinner("Validating availability of repositories for #{@version}") do |spinner|
+            find_absent_repos(spinner)
+          end
+        end
       else
-        with_spinner("Validating availability of repositories for #{@version}") do |spinner|
-          find_absent_repos(spinner)
+        unless feature(:upstream_repositories).available?(@version)
+          fail!("Upstream repositories for version #{@version} are not available")
         end
       end
     end
