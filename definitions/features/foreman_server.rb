@@ -47,7 +47,7 @@ module ForemanMaintain
       end
 
       def rake!(command)
-        execute!('foreman-rake #{command}')
+        execute!("foreman-rake #{command}")
       end
     end
   end
