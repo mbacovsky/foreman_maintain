@@ -14,7 +14,7 @@ module Procedures::Packages
 
     def run
       assumeyes_val = @assumeyes.nil? ? assumeyes? : @assumeyes
-      packages_action(:upgrade, @collections, :assumeyes => assumeyes_val)
+      package_manager.update(@collections, :assumeyes => assumeyes_val)
       package_manager.clean_cache
     end
 
