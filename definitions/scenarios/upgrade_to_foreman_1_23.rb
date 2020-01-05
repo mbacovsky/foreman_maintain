@@ -6,7 +6,7 @@ module Scenarios::Foreman_1_23
         confine do
           feature(:instance).upstream? && feature(:foreman_server) && feature(:foreman_server) && \
               (feature(:foreman_server).current_version.major_minor == '1.22' || \
-                  ForemanMaintain.UpgradeRunner.current_target_version == '1_23')
+                  ForemanMaintain.upgrade_in_progress == '1_23')
         end
         instance_eval(&block)
       end
