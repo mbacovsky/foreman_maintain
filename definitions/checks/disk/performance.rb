@@ -1,13 +1,6 @@
 module Checks
   module Disk
     class Performance < ForemanMaintain::Check
-      DEFAULT_DIRS = %i[pulp mongo foreman_database].inject({}) do |dirs, f|
-        if feature(f) && File.directory?(feature(f).data_dir)
-          dirs[feature(f).label_dashed] = feature(f).data_dir
-        end
-        dirs
-      end
-
       metadata do
         label :disk_performance
         tags :pre_upgrade

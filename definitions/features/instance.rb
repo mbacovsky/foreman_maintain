@@ -69,6 +69,7 @@ class Features::Instance < ForemanMaintain::Feature
   def server_connection
     net = Net::HTTP.new(ForemanMaintain.config.foreman_url, ForemanMaintain.config.foreman_port)
     net.use_ssl = true
+    net.verify_mode = OpenSSL::SSL::VERIFY_NONE
     net
   end
 

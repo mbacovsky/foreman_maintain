@@ -6,10 +6,6 @@ module Checks::Repositories
         Procedures::Packages::Install.new(:packages => [ForemanMaintain::Utils::Facter.package])
       end
 
-      confine do
-        feature(:instance).downstream
-      end
-
       param :version,
             'Version for which repositories needs to be validated',
             :required => true

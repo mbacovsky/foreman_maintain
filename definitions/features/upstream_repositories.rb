@@ -16,11 +16,11 @@ class Features::UpstreamRepositories < ForemanMaintain::Feature
 
   def setup_repositories(version)
     if feature(:katello)
-      feature(:package_manager).update(katello_repos(version), :assumeyes => true)
+      package_manager.update(katello_repos(version), :assumeyes => true)
       version = VERSION_MAPPING[version]
     end
-    feature(:package_manager).upgrade_foreman_repos(version)
-    feature(:package_manager).clean_cache
+    package_manager.upgrade_foreman_repos(version)
+    package_manager.clean_cache
   end
 
   def katello_repos(version)
@@ -32,7 +32,7 @@ class Features::UpstreamRepositories < ForemanMaintain::Feature
       link_valid?(katello_repos(version))
       version = VERSION_MAPPING[version]
     end
-    feature(:package_manager).foreman_repos_valid?(version)
+    package_manager.foreman_repos_valid?(version)
   end
 
   private

@@ -5,7 +5,7 @@ module Scenarios::Katello_3_14
         tags :upgrade_scenario
         confine do
           feature(:instance).upstream? && feature(:foreman_server) && \
-              feature(:katello).current_version.major_minor == '3.13'
+              feature(:katello) && feature(:katello).current_version.major_minor == '3.13'
         end
         instance_eval(&block)
       end

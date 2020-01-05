@@ -45,6 +45,10 @@ module ForemanMaintain
       def current_version
         @current_version ||= rpm_version('foreman')
       end
+
+      def rake!(command)
+        execute!(command)
+      end
     end
   end
 end
