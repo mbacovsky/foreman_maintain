@@ -1,25 +1,25 @@
-module Scenarios::Foreman_1_23
+module Scenarios::Foreman_1_24
   class Abstract < ForemanMaintain::Scenario
     def self.upgrade_metadata(&block)
       metadata do
         tags :upgrade_scenario
         confine do
           feature(:instance).upstream? && feature(:foreman_server) && feature(:foreman_server) && \
-              (feature(:foreman_server).current_version.major_minor == '1.22' || \
-                  ForemanMaintain.UpgradeRunner.current_target_version == '1_23')
+              (feature(:foreman_server).current_version.major_minor == '1.23' || \
+                  ForemanMaintain.UpgradeRunner.current_target_version == '1_24')
         end
         instance_eval(&block)
       end
     end
 
     def target_version
-      '1.23'
+      '1.24'
     end
   end
 
   class PreUpgradeCheck < Abstract
     upgrade_metadata do
-      description 'Checks before upgrading to Foreman 1.23'
+      description 'Checks before upgrading to Foreman 1.24'
       tags :pre_upgrade_checks
       run_strategy :fail_slow
     end
@@ -27,13 +27,13 @@ module Scenarios::Foreman_1_23
     def compose
       add_steps(find_checks(:default))
       add_steps(find_checks(:pre_upgrade))
-      add_step(Checks::Repositories::Validate.new(:version => '1.23'))
+      add_step(Checks::Repositories::Validate.new(:version => '1.24'))
     end
   end
 
   class PreMigrations < Abstract
     upgrade_metadata do
-      description 'Procedures before migrating to Foreman 1.23'
+      description 'Procedures before migrating to Foreman 1.24'
       tags :pre_migrations
     end
 
@@ -45,12 +45,12 @@ module Scenarios::Foreman_1_23
 
   class Migrations < Abstract
     upgrade_metadata do
-      description 'Migration scripts to Foreman 1.23'
+      description 'Migration scripts to Foreman 1.24'
       tags :migrations
     end
 
     def compose
-      add_step(Procedures::Repositories::Setup.new(:version => '1.23'))
+      add_step(Procedures::Repositories::Setup.new(:version => '1.24'))
       add_step(Procedures::Packages::UnlockVersions.new)
       add_step(Procedures::Packages::UpdateCollections.new(:assumeyes => true))
       add_step(Procedures::Packages::Update.new(:assumeyes => true))
@@ -63,7 +63,7 @@ module Scenarios::Foreman_1_23
 
   class PostMigrations < Abstract
     upgrade_metadata do
-      description 'Procedures after migrating to Foreman 1.23'
+      description 'Procedures after migrating to Foreman 1.24'
       tags :post_migrations
     end
 
@@ -83,7 +83,7 @@ module Scenarios::Foreman_1_23
 
   class PostUpgradeChecks < Abstract
     upgrade_metadata do
-      description 'Checks after upgrading to Foreman 1.23'
+      description 'Checks after upgrading to Foreman 1.24'
       tags :post_upgrade_checks
       run_strategy :fail_slow
     end
