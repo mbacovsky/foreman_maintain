@@ -54,7 +54,8 @@ class Features::Installer < ForemanMaintain::Feature
   end
 
   def can_upgrade?
-    @installer_type == :scenarios || @installer_type == :legacy_katello
+    # TODO: how about capsules?
+    (@installer_type == :scenarios || @installer_type == :legacy_katello) && feature(:katello)
   end
 
   def config_files
@@ -92,7 +93,8 @@ class Features::Installer < ForemanMaintain::Feature
   end
 
   def upgrade(exec_options = {})
-    arguments = '--disable-system-checks'
+    arguments = ''
+    arguments += ' --disable-system-checks' if feature(:katello) # FIXME: katello capsule too
     arguments += ' --upgrade' if can_upgrade?
     run(arguments, exec_options)
   end
