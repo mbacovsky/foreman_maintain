@@ -53,6 +53,7 @@ module Scenarios::Foreman_1_23
       add_step(Procedures::Packages::UnlockVersions.new)
       add_step(Procedures::Packages::UpdateCollections.new(:assumeyes => true))
       add_step(Procedures::Packages::Update.new(:assumeyes => true))
+      add_step(Procedures::Service::Start.new(:only => 'postgresql'))
       add_step(Procedures::Foreman::DbMigrate.new)
       add_step(Procedures::Foreman::DbSeed.new)
       add_step(Procedures::Installer::Upgrade.new)
